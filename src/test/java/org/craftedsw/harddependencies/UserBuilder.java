@@ -19,12 +19,24 @@ public class UserBuilder {
 
 	public User build() {
 		User current = new User();
-		for (Trip trip : trips) {
-			current.addTrip(trip);
-		}
-		for (User user : users) {
-			current.addFriend(user);
-		}
+		addTrips(current);
+		addFriends(current);
 		return current;
+	}
+
+	protected void addFriends(User current) {
+		if (users != null) {
+			for (User user : users) {
+				current.addFriend(user);
+			}
+		}
+	}
+
+	protected void addTrips(User current) {
+		if (trips != null) {
+			for (Trip trip : trips) {
+				current.addTrip(trip);
+			}
+		}
 	}
 }
