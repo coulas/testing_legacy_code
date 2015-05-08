@@ -1,5 +1,7 @@
 package org.craftedsw.harddependencies;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.craftedsw.harddependencies.exception.UserNotLoggedInException;
 import org.craftedsw.harddependencies.trip.TripService;
 import org.craftedsw.harddependencies.user.User;
@@ -9,19 +11,26 @@ public class TripServiceTest {
 
 	private final User GUEST = null;
 	private final User SOLO_USER = new User();
-	
+
 	private User loggedUser = new User();
-	
-	TripService tripService = new TripService() {
+
+	private TripService testableTripService = new TripService() {
 		@Override
 		protected User getLoggedUser() {
 			return loggedUser;
 		}
 	};
-	
-	@Test(expected=UserNotLoggedInException.class)
-	public void shallThrowExceptionWhenNotLogged() throws UserNotLoggedInException {
+
+	@Test(expected = UserNotLoggedInException.class)
+	public void shallThrowExceptionWhenNotLogged()
+			throws UserNotLoggedInException {
 		loggedUser = GUEST;
-		tripService.getTripsByUser(SOLO_USER);
+		try {
+			testableTripService.getTripsByUser(SOLO_USER);
+		} catch (UserNotLoggedInException e) {
+			assertThat(e.getMessage()).isEqualTo("You need to log in in order to your friends trips.");
+			throw e;
+		}
 	}
+	
 }

@@ -30,7 +30,7 @@ public class TripService {
 			}
 			return tripList;
 		} else {
-			throw new UserNotLoggedInException();
+			throw new UserNotLoggedInException("You need to log in in order to your friends trips.");
 		}
 	}
 
