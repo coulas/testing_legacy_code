@@ -18,12 +18,7 @@ public class TripService {
 		// logged or die is a safe guard (use every where?) and is not really a tripByUser logic a method call could be more explicit
 		if (loggedUser != null) {
 			// finding user friends is not a trip logic !
-			for (User friend : user.getFriends()) {
-				if (friend.equals(loggedUser)) {
-					isFriend = true;
-					break; 
-				}
-			}
+			isFriend = user.isFriendWith(loggedUser);
 			if (isFriend) {
 				// test class without testing other dao (and static call)
 				tripList = findTripByUsers(user);
@@ -33,6 +28,7 @@ public class TripService {
 			throw new UserNotLoggedInException("You need to log in in order to your friends trips.");
 		}
 	}
+
 
 	protected List<Trip> findTripByUsers(User user) {
 		return TripDAO.findTripsByUser(user);
