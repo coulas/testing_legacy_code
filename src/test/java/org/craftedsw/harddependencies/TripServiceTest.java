@@ -24,6 +24,10 @@ public class TripServiceTest {
 		protected User getLoggedUser() {
 			return loggedUser;
 		}
+		@Override
+		protected List<Trip> findTripByUsers(User user) {
+			return user.trips();
+		}
 	};
 
 	@Test(expected = UserNotLoggedInException.class)
@@ -53,7 +57,7 @@ public class TripServiceTest {
 	}
 
 	@Test
-	public void shall_return_Trips_when_friends()
+	public void shall_return_trips_when_friends()
 			throws UserNotLoggedInException {
 		loggedUser = REGISTERED_USER;
 		User friend = new User();

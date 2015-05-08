@@ -21,17 +21,21 @@ public class TripService {
 			for (User friend : user.getFriends()) {
 				if (friend.equals(loggedUser)) {
 					isFriend = true;
-					break;
+					break; 
 				}
 			}
 			if (isFriend) {
 				// test class without testing other dao (and static call)
-				tripList = TripDAO.findTripsByUser(user);
+				tripList = findTripByUsers(user);
 			}
 			return tripList;
 		} else {
 			throw new UserNotLoggedInException("You need to log in in order to your friends trips.");
 		}
+	}
+
+	protected List<Trip> findTripByUsers(User user) {
+		return TripDAO.findTripsByUser(user);
 	}
 
 	protected User getLoggedUser() {
