@@ -10,10 +10,10 @@ import org.craftedsw.harddependencies.user.UserSession;
 public class TripService {
 
 	public List<Trip> getTripsByUser(User user) throws UserNotLoggedInException {
-		// not logged user thorw exception and tripList is useless (avoid its init time and gc time)
+		// not logged user throw exception and tripList is useless (avoid its init time and gc time)
 		List<Trip> tripList = new ArrayList<Trip>();
 		// test class without testing singleton
-		User loggedUser = UserSession.getInstance().getLoggedUser();
+		User loggedUser = getLoggedUser();
 		boolean isFriend = false;
 		// logged or die is a safe guard (use every where?) and is not really a tripByUser logic a method call could be more explicit
 		if (loggedUser != null) {
@@ -32,5 +32,9 @@ public class TripService {
 		} else {
 			throw new UserNotLoggedInException();
 		}
+	}
+
+	protected User getLoggedUser() {
+		return UserSession.getInstance().getLoggedUser();
 	}
 }
