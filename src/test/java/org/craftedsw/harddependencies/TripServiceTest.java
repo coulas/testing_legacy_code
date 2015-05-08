@@ -8,34 +8,38 @@ import org.craftedsw.harddependencies.exception.UserNotLoggedInException;
 import org.craftedsw.harddependencies.trip.Trip;
 import org.craftedsw.harddependencies.trip.TripService;
 import org.craftedsw.harddependencies.user.User;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TripServiceTest {
 
-	private final User GUEST = null;
-	private final User REGISTERED_USER = new User();
-	private final Trip BUDAPEST = new Trip();
-	private final Trip LONDON = new Trip();
-
 	private User loggedUser;
 
-	private TripService testableTripService = new TripService() {
-		@Override
-		protected User getLoggedUser() {
-			return loggedUser;
-		}
-		@Override
-		protected List<Trip> findTripByUsers(User user) {
-			return user.trips();
-		}
-	};
+	private TripService testableTripService;
+
+	@Before
+	public void commonDefaults() {
+		testableTripService = new TripService() {
+			@Override
+			protected User getLoggedUser() {
+				return loggedUser;
+			}
+
+			@Override
+			protected List<Trip> findTripByUsers(User user) {
+				return user.trips();
+			}
+		};
+
+		loggedUser = Given.theRegisteredUser();
+	}
 
 	@Test(expected = UserNotLoggedInException.class)
 	public void shallThrowExceptionWhenNotLogged()
 			throws UserNotLoggedInException {
-		loggedUser = GUEST;
+		loggedUser = Given.theGuestUser();
 		try {
-			testableTripService.getTripsByUser(new User());
+			testableTripService.getTripsByUser(Given.anyNewUser());
 		} catch (UserNotLoggedInException e) {
 			assertThat(e.getMessage()).isEqualTo(
 					"You need to log in in order to your friends trips.");
@@ -46,10 +50,10 @@ public class TripServiceTest {
 	@Test
 	public void shall_return_empty_list_when_not_friends()
 			throws UserNotLoggedInException {
-		loggedUser = REGISTERED_USER;
-		User stranger = new User();
-		stranger.addFriend(new User());
-		stranger.addTrip(new Trip());
+		User stranger = Given.anyCustomUser()
+			.withFriends(Given.anyNewUser())
+			.withTrips(new Trip())
+			.build();
 
 		List<Trip> trips = testableTripService.getTripsByUser(stranger);
 
@@ -59,15 +63,15 @@ public class TripServiceTest {
 	@Test
 	public void shall_return_trips_when_friends()
 			throws UserNotLoggedInException {
-		loggedUser = REGISTERED_USER;
-		User friend = new User();
-		friend.addFriend(REGISTERED_USER);
-		friend.addFriend(new User());
-		friend.addTrip(BUDAPEST);
-		friend.addTrip(LONDON);
-		
+		Trip budapest = Given.tripToBudapest();
+		Trip london = Given.tripToLondon();
+		User friend = Given.anyCustomUser()
+				.withFriends(Given.theRegisteredUser(), Given.anyNewUser())
+				.withTrips(budapest, london)
+				.build();
+
 		List<Trip> trips = testableTripService.getTripsByUser(friend);
 
-		assertThat(trips).containsOnly(LONDON, BUDAPEST);
+		assertThat(trips).containsOnly(london, budapest);
 	}
 }
