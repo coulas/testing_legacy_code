@@ -1,8 +1,5 @@
 package org.craftedsw.harddependencies;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
 import org.craftedsw.harddependencies.exception.UserNotLoggedInException;
 import org.craftedsw.harddependencies.trip.Trip;
 import org.craftedsw.harddependencies.trip.TripDAO;
@@ -14,6 +11,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TripServiceTest {
@@ -43,7 +44,7 @@ public class TripServiceTest {
 		
 		assertThat(tripService.getTripsByUser(stranger, Given.theLoggedInUser())).isEmpty();
 	}
-
+	
 	@Test
 	public void shall_have_trips_when_friends() throws UserNotLoggedInException {
 		Trip budapest = Given.anyTrip();
