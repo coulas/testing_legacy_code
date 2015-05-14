@@ -8,6 +8,13 @@ import org.craftedsw.harddependencies.user.User;
 
 public class TripService {
 	
+	private TripDAO tripDAO = new TripDAO();
+	
+	public TripService(TripDAO tripDAO) {
+		super();
+		this.tripDAO = tripDAO;
+	}
+	
 	public List<Trip> getTripsByUser(User user, User loggedInUser) throws UserNotLoggedInException {
 		validateLoggedInUser(loggedInUser);
 		return user.isFriendWith(loggedInUser)
@@ -26,7 +33,7 @@ public class TripService {
 	}
 	
 	protected List<Trip> findTripsForUser(User user) {
-		return TripDAO.findTripsByUser(user);
+		return tripDAO.findTripsFor(user);
 	}
 	
 }

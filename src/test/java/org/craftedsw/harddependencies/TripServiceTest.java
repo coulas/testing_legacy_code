@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.craftedsw.harddependencies.exception.UserNotLoggedInException;
 import org.craftedsw.harddependencies.trip.Trip;
+import org.craftedsw.harddependencies.trip.TripDAO;
 import org.craftedsw.harddependencies.trip.TripService;
 import org.craftedsw.harddependencies.user.User;
 import org.junit.Test;
@@ -12,8 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TripServiceTest {
 	
-	private User loggedInUser = Given.REGISTERED_USER;
-	final TripService tripService = new TripService() {
+	final TripService tripService = new TripService(new TripDAO()) {
 		
 		@Override
 		protected List<Trip> findTripsForUser(User user) {
