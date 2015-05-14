@@ -10,19 +10,12 @@ import org.craftedsw.harddependencies.user.UserSession;
 public class TripService {
 	
 	public List<Trip> getTripsByUser(User user) throws UserNotLoggedInException {
-		User loggedUser = getLoggedInUser();
-		if (loggedUser == null) {
+		User loggedInUser = getLoggedInUser();
+		if (loggedInUser == null) {
 			throw new UserNotLoggedInException();
 		}
-		boolean isFriend = false;
-		for (User friend : user.getFriends()) {
-			if (friend.equals(loggedUser)) {
-				isFriend = true;
-				break;
-			}
-		}
 		List<Trip> tripList = new ArrayList<Trip>();
-		if (isFriend) {
+		if (user.isFriendWith(loggedInUser)) {
 			tripList = findTripsForUser(user);
 		}
 		return tripList;
