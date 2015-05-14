@@ -1,5 +1,7 @@
 package org.craftedsw.harddependencies;
 
+import java.util.List;
+
 import org.craftedsw.harddependencies.exception.UserNotLoggedInException;
 import org.craftedsw.harddependencies.trip.Trip;
 import org.craftedsw.harddependencies.trip.TripService;
@@ -18,6 +20,11 @@ public class TripServiceTest {
 		@Override
 		protected User getLoggedInUser() {
 			return loggedInUser;
+		}
+		
+		@Override
+		protected List<Trip> findTripsForUser(User user) {
+			return user.trips();
 		}
 		
 	};
@@ -45,7 +52,7 @@ public class TripServiceTest {
 		final Trip budapest = new Trip();
 		final Trip london = new Trip();
 		
-		final User friend = anyUser;
+		final User friend = new User();
 		friend.addFriend(anyUser);
 		friend.addFriend(REGISTERED_USER);
 		friend.addTrip(budapest);
