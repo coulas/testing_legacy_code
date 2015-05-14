@@ -32,7 +32,7 @@ public class TripService {
 		return new ArrayList<Trip>();
 	}
 	
-	protected List<Trip> findTripsForUser(User user) {
+	private List<Trip> findTripsForUser(User user) {
 		return tripDAO.findTripsFor(user);
 	}
 	

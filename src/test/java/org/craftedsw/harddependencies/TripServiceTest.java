@@ -1,7 +1,5 @@
 package org.craftedsw.harddependencies;
 
-import java.util.List;
-
 import org.craftedsw.harddependencies.exception.UserNotLoggedInException;
 import org.craftedsw.harddependencies.trip.Trip;
 import org.craftedsw.harddependencies.trip.TripDAO;
@@ -23,20 +21,11 @@ public class TripServiceTest {
 	private TripDAO tripDao;
 	
 	@InjectMocks
-	private TripService mockedTripService;
-	
-	final TripService tripService = new TripService(new TripDAO()) {
-		
-		@Override
-		protected List<Trip> findTripsForUser(User user) {
-			return user.getTrips();
-		}
-		
-	};
+	private TripService tripService;
 	
 	@Test(expected = UserNotLoggedInException.class)
 	public void should_throw_exception_when_not_logged_in() throws Exception {
-		mockedTripService.getTripsByUser(Given.anyUser(), Given.GUEST_USER);
+		tripService.getTripsByUser(Given.anyUser(), Given.GUEST_USER);
 	}
 	
 	@Test
@@ -45,7 +34,7 @@ public class TripServiceTest {
 				.withTrips(Given.TRIP_TO_BUDAPEST)
 				.build();
 		
-		assertThat(mockedTripService.getTripsByUser(stranger, Given.REGISTERED_USER)).isEmpty();
+		assertThat(tripService.getTripsByUser(stranger, Given.REGISTERED_USER)).isEmpty();
 	}
 	
 	@Test
@@ -58,6 +47,6 @@ public class TripServiceTest {
 				.build();
 		BDDMockito.given(tripDao.findTripsFor(friend)).willReturn(friend.getTrips());
 		
-		assertThat(mockedTripService.getTripsByUser(friend, Given.REGISTERED_USER)).contains(london, budapest);
+		assertThat(tripService.getTripsByUser(friend, Given.REGISTERED_USER)).contains(london, budapest);
 	}
 }
