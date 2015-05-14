@@ -6,7 +6,14 @@ import org.craftedsw.harddependencies.user.User;
 import org.junit.Test;
 
 public class TripServiceTest {
-	final TripService tripService = new TripService();
+	final TripService tripService = new TripService() {
+		
+		@Override
+		protected User getLoggedInUser() {
+			return null;
+		}
+		
+	};
 	
 	@Test(expected = UserNotLoggedInException.class)
 	public void should_throw_exception_when_not_logged_in() throws Exception {
