@@ -26,6 +26,7 @@ public class TripServiceTest {
 	public void should_throw_exception_when_not_logged_in() throws Exception {
 		loggedInUser = GUEST_USER;
 		final User anyUser = new User();
+		
 		tripService.getTripsByUser(anyUser);
 	}
 	
@@ -34,6 +35,22 @@ public class TripServiceTest {
 		final User stranger = new User();
 		final Trip budapest = new Trip();
 		stranger.addTrip(budapest);
+		
 		assertThat(tripService.getTripsByUser(stranger)).isEmpty();
+	}
+	
+	@Test
+	public void should_return_trips_when_friends() throws Exception {
+		final User anyUser = new User();
+		final Trip budapest = new Trip();
+		final Trip london = new Trip();
+		
+		final User friend = anyUser;
+		friend.addFriend(anyUser);
+		friend.addFriend(REGISTERED_USER);
+		friend.addTrip(budapest);
+		friend.addTrip(london);
+		
+		assertThat(tripService.getTripsByUser(friend)).contains(london, budapest);
 	}
 }
