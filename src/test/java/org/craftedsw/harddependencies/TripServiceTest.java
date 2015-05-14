@@ -22,7 +22,7 @@ public class TripServiceTest {
 		
 		@Override
 		protected List<Trip> findTripsForUser(User user) {
-			return user.trips();
+			return user.getTrips();
 		}
 		
 	};
