@@ -8,10 +8,21 @@ import org.craftedsw.harddependencies.trip.TripDAO;
 import org.craftedsw.harddependencies.trip.TripService;
 import org.craftedsw.harddependencies.user.User;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TripServiceTest {
+	
+	@Mock
+	private TripDAO tripDao;
+	
+	@InjectMocks
+	private TripService mockedTripService;
 	
 	final TripService tripService = new TripService(new TripDAO()) {
 		
