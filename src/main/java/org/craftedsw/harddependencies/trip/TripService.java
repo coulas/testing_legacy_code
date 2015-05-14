@@ -8,7 +8,7 @@ import org.craftedsw.harddependencies.user.User;
 
 public class TripService {
 	
-	private TripDAO tripDAO = new TripDAO();
+	private final TripDAO tripDAO;
 	
 	public TripService(TripDAO tripDAO) {
 		super();
