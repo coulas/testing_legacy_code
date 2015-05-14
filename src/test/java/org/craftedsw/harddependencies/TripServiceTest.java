@@ -9,6 +9,7 @@ import org.craftedsw.harddependencies.trip.TripService;
 import org.craftedsw.harddependencies.user.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -35,7 +36,7 @@ public class TripServiceTest {
 	
 	@Test(expected = UserNotLoggedInException.class)
 	public void should_throw_exception_when_not_logged_in() throws Exception {
-		tripService.getTripsByUser(Given.anyUser(), Given.GUEST_USER);
+		mockedTripService.getTripsByUser(Given.anyUser(), Given.GUEST_USER);
 	}
 	
 	@Test
@@ -44,7 +45,7 @@ public class TripServiceTest {
 				.withTrips(Given.TRIP_TO_BUDAPEST)
 				.build();
 		
-		assertThat(tripService.getTripsByUser(stranger, Given.REGISTERED_USER)).isEmpty();
+		assertThat(mockedTripService.getTripsByUser(stranger, Given.REGISTERED_USER)).isEmpty();
 	}
 	
 	@Test
@@ -55,7 +56,8 @@ public class TripServiceTest {
 				.withFriends(Given.anyUser(), Given.REGISTERED_USER)
 				.withTrips(budapest, london)
 				.build();
+		BDDMockito.given(tripDao.findTripsFor(friend)).willReturn(friend.getTrips());
 		
-		assertThat(tripService.getTripsByUser(friend, Given.REGISTERED_USER)).contains(london, budapest);
+		assertThat(mockedTripService.getTripsByUser(friend, Given.REGISTERED_USER)).contains(london, budapest);
 	}
 }
