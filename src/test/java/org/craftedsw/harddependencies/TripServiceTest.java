@@ -16,11 +16,6 @@ public class TripServiceTest {
 	final TripService tripService = new TripService() {
 		
 		@Override
-		protected User getLoggedInUser() {
-			return loggedInUser;
-		}
-		
-		@Override
 		protected List<Trip> findTripsForUser(User user) {
 			return user.getTrips();
 		}
@@ -29,9 +24,7 @@ public class TripServiceTest {
 	
 	@Test(expected = UserNotLoggedInException.class)
 	public void should_throw_exception_when_not_logged_in() throws Exception {
-		loggedInUser = Given.GUEST_USER;
-		
-		tripService.getTripsByUser(Given.anyUser());
+		tripService.getTripsByUser(Given.anyUser(), Given.GUEST_USER);
 	}
 	
 	@Test
@@ -40,7 +33,7 @@ public class TripServiceTest {
 				.withTrips(Given.TRIP_TO_BUDAPEST)
 				.build();
 		
-		assertThat(tripService.getTripsByUser(stranger)).isEmpty();
+		assertThat(tripService.getTripsByUser(stranger, Given.REGISTERED_USER)).isEmpty();
 	}
 	
 	@Test
@@ -52,6 +45,6 @@ public class TripServiceTest {
 				.withTrips(budapest, london)
 				.build();
 		
-		assertThat(tripService.getTripsByUser(friend)).contains(london, budapest);
+		assertThat(tripService.getTripsByUser(friend, Given.REGISTERED_USER)).contains(london, budapest);
 	}
 }

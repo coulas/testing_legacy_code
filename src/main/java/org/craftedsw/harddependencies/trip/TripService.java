@@ -5,25 +5,22 @@ import java.util.List;
 
 import org.craftedsw.harddependencies.exception.UserNotLoggedInException;
 import org.craftedsw.harddependencies.user.User;
-import org.craftedsw.harddependencies.user.UserSession;
 
 public class TripService {
 	
-	public List<Trip> getTripsByUser(User user) throws UserNotLoggedInException {
-		User loggedInUser = validateLoggedInUser();
+	public List<Trip> getTripsByUser(User user, User loggedInUser) throws UserNotLoggedInException {
+		validateLoggedInUser(loggedInUser);
 		return user.isFriendWith(loggedInUser)
 				? findTripsForUser(user)
 				: noTrips();
 	}
-
-	private User validateLoggedInUser() throws UserNotLoggedInException {
-		User loggedInUser = getLoggedInUser();
+	
+	private void validateLoggedInUser(User loggedInUser) throws UserNotLoggedInException {
 		if (loggedInUser == null) {
 			throw new UserNotLoggedInException();
 		}
-		return loggedInUser;
 	}
-
+	
 	private ArrayList<Trip> noTrips() {
 		return new ArrayList<Trip>();
 	}
@@ -32,7 +29,4 @@ public class TripService {
 		return TripDAO.findTripsByUser(user);
 	}
 	
-	protected User getLoggedInUser() {
-		return UserSession.getInstance().getLoggedUser();
-	}
 }
