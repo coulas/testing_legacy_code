@@ -1,6 +1,7 @@
-package org.craftedsw.harddependencies.user;
+package org.craftedsw.harddependencies;
 
 import org.craftedsw.harddependencies.Given;
+import org.craftedsw.harddependencies.user.User;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
